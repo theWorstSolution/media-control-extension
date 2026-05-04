@@ -1,0 +1,14 @@
+{
+    "manifest_version": 3,
+    "name": "Audio Controller",
+    "version": "1.0",
+    "content_scripts": [
+      {
+        "matches": ["https://ondoku3.com/*", "https://www.youtube.com/*",
+                    "https://www.youtube-nocookie.com/*"],
+        "js": ["content.js"],
+        "all_frames": true,
+        "run_at": "document_idle"
+      }
+    ]
+  }
