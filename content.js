@@ -134,6 +134,7 @@ document.addEventListener("keydown", (e) => {
     }
   }
   if (['a','s','d','w',' '].includes(e.key)){
+    e.preventDefault();
     const iframes = document.querySelectorAll("iframe");
 
     iframes.forEach((iframe) => {
