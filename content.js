@@ -1,3 +1,4 @@
+console.log("loaded script", location.href, window.top === window);
 function getMedia() {
   return document.querySelector("audio, video");
 }
@@ -61,8 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("keydown", (e) => {
-  console.log("helo2")
-
+  // console.log("on key down")
   const tag = document.activeElement.tagName;
   if (
     ["INPUT", "TEXTAREA"].includes(tag) ||
@@ -70,7 +70,7 @@ document.addEventListener("keydown", (e) => {
   ) {
     return;
   }
-  console.log("helo1")
+  console.log("on key down no focus")
   const media = getMedia();
   if (media){
     switch (e.key) {
@@ -134,25 +134,27 @@ document.addEventListener("keydown", (e) => {
     }
   }
   
-  const iframe = document.querySelector("iframe");
-  console.log("co iframe")
-  if (iframe){
-    iframe.contentWindow.postMessage(
+  const iframes = document.querySelectorAll("iframe");
+
+  iframes.forEach((iframe) => {
+    iframe.contentWindow?.postMessage(
       {
         type: "CUSTOM_AUDIO_CONTROL",
         key: e.key.toLowerCase()
       },
       "*"
     );
-  }
+  });
+
+  // console.log("broadcast sent:", e.key);
 });
 
 window.addEventListener("message", (event) => {
   if (event.data?.type !== "CUSTOM_AUDIO_CONTROL") return;
-  console.log("co message")
+  // console.log("co message")
   const video = document.querySelector("video");
   if (!video) return;
-  console.log("co video trong iframe")
+  // console.log("co video trong iframe")
   switch (event.data.key) {
     case "a":
       video.currentTime -= 3;
