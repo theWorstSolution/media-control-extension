@@ -133,20 +133,21 @@ document.addEventListener("keydown", (e) => {
         break;
     }
   }
+  if (['a','s','d','w',' '].includes(e.key)){
+    const iframes = document.querySelectorAll("iframe");
+
+    iframes.forEach((iframe) => {
+      iframe.contentWindow?.postMessage(
+        {
+          type: "CUSTOM_AUDIO_CONTROL",
+          key: e.key.toLowerCase()
+        },
+        "*"
+      );
+    });
   
-  const iframes = document.querySelectorAll("iframe");
-
-  iframes.forEach((iframe) => {
-    iframe.contentWindow?.postMessage(
-      {
-        type: "CUSTOM_AUDIO_CONTROL",
-        key: e.key.toLowerCase()
-      },
-      "*"
-    );
-  });
-
-  // console.log("broadcast sent:", e.key);
+    // console.log("broadcast sent:", e.key);
+  } 
 });
 
 window.addEventListener("message", (event) => {
@@ -163,10 +164,19 @@ window.addEventListener("message", (event) => {
       video.currentTime += 3;
       break;
     case "w":
-      media.volume = Math.max(0, media.volume + 0.1);
+      video.volume = Math.max(0, video.volume + 0.1);
       break;
     case "s":
-      media.volume = Math.max(0, media.volume - 0.1);
+      video.volume = Math.max(0, video.volume - 0.1);
+      break;
+    case " ":
+      if (video.paused) {
+        video.play();
+        // showToast("▶ Play");
+      } else {
+        video.pause();
+        // showToast("⏸ Pause");
+      }
       break;
   }
 });
